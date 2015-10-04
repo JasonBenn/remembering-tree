@@ -1,0 +1,63 @@
+@import 'shared';
+
+body {
+  background: #262626;
+  font-family: $arial;
+  text-align: center;
+  background: whitesmoke;
+  max-width: 70em;
+  max-width: 95%;
+  margin: 2em auto 0 auto;
+
+  @include center;
+}
+
+h1, h2 {
+  text-align: center;
+  text-transform: uppercase;
+  font-family: $open-sans;
+  color: $dark;
+  font-weight: 400;
+}
+
+h1 {
+  margin-top: 2em;
+  font-size: 2em;
+}
+
+h2 {
+  font-size: 1.2em;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+button {
+  color: white;
+  border: 0 none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: $arial;
+  font-size: .9em;
+  font-weight: bold;
+  line-height: 1.75em;
+  margin-bottom: 0;
+  margin-top: 10px;
+  padding: 7px 10px;
+  text-transform: none;
+  transition: background-color 0.3s ease 0s;
+  width: auto;
+
+  &.red {
+    background-color: $red;
+  }
+
+  &.green {
+    background-color: $green;
+  }
+
+  &:hover {
+    background-color: $dark;
+  }
+}

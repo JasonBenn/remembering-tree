@@ -1,0 +1,29 @@
+{
+  "name": "remembering-tree",
+  "version": "1.0.0",
+  "private": true,
+  "main": "src/app.js",
+  "scripts": {
+    "start": "webpack-dev-server"
+  },
+  "dependencies": {
+    "babel-runtime": "5.8.20",
+    "lodash": "*",
+    "normalize.css": "*"
+  },
+  "devDependencies": {
+    "autoprefixer-loader": "^3.1.0",
+    "babel": "^5.8.21",
+    "babel-core": "*",
+    "babel-loader": "*",
+    "css-loader": "*",
+    "node-sass": "*",
+    "sass-loader": "*",
+    "style-loader": "*",
+    "tape": "^4.2.0",
+    "webpack": "*",
+    "webpack-dev-server": "^1.11.0"
+  },
+  "author": "",
+  "license": "ISC"
+}

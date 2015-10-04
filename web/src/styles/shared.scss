@@ -1,0 +1,20 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,700);
+
+$red:   #E0645C;
+$green: #46b98a;
+$dark:  #444444;
+
+$open-sans: 'Open Sans', sans-serif;
+$arial: Arial, sans-serif;
+
+@mixin center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin spread {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
