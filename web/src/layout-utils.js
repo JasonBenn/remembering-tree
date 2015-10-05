@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-const calculateLayout = nodes => {
+export const calculateLayout = nodes => {
   calculateXPositions(nodes)
   calculateYPositions(nodes)
   return nodes;
@@ -22,6 +22,9 @@ const calculateXPositions = nodes => {
 const width = node => 80
 
 const calculateYPositions = nodes => {
+  _.forEach(nodes, node => {
+    node.position.y = _.random(0, 500)
+  })
   return nodes;
 }
 
