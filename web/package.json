@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "babel-runtime": "5.8.20",
+    "backbone": "^1.2.3",
+    "jquery": "^2.1.4",
     "lodash": "*",
     "normalize.css": "*"
   },

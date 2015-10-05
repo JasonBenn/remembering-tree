@@ -7,6 +7,10 @@
 </head>
 <body>
   <div id="main"></div>
+  <script type="text/template" id="node-template">
+    <div class="node" style="transform: translateX(<%- position.x %>px) translateY(<%- position.y %>px);">Node: <%- title %></div>
+  </script>
+
   <script src="/assets/bundle.js"></script>
 </body>
 </html>
