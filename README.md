@@ -1,4 +1,4 @@
-NAME:
+NAME/KEYWORDS:
   The Knowledge Tree.
   The Giving Tree?
   The Apple of Knowledge?
@@ -74,5 +74,9 @@ State:
   focus mode: set of IDs that are visible.
 
 IDEAS:
-Flashcards/categories maybe should be the same.
-Studying would bring in any card with a back.
+  Flashcards/categories maybe should be the same.
+  Studying would bring in any card with a back.
+
+RESOURCES:
+  Pretty tree styles (from D3): http://bl.ocks.org/mbostock/4339184
+  An explanation of a pleasing tree-drawing algorithm: https://rachel53461.wordpress.com/2014/04/20/algorithm-for-drawing-trees/

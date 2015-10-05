@@ -19,6 +19,7 @@ const calculateXPositions = nodes => {
 }
 
 // TODO: Width of the first line of a node. Is number of chars or 80, whichever is less.
+// Actually, that's a view concern.
 const width = node => 80
 
 const calculateYPositions = nodes => {
@@ -65,7 +66,7 @@ if (require.main === module) {
   })
 
   test('calculateLayout', t => {
-    // TODO:
+    // TODO: finish this test.
     const positionedNodes = nodes
 
     t.plan(1)
