@@ -1,37 +1,49 @@
 import $ from 'jquery'
 import _ from 'lodash'
-import { View, Model, Collection } from 'backbone'
-import { CollectionView } from 'backbone.marionette'
+import { Model, Collection } from 'backbone'
+import { ItemView, CollectionView } from 'backbone.marionette'
 import { calculateLayout } from './layout-utils'
 
 import 'normalize.css'
 import './styles/main.scss'
 
 const Node = Model.extend({
-  toggle: function(attr) {
-    this[attr] = !this[attr]
-    // QUESTION: Will this fire the right event?
+  toggleVisibility: function(attr) {
+    this.set('visibility', !this.get('visibility'))
   }
 })
 
-const NodeCollection = CollectionView.extend({
-  childView: NodeView
+const NodeCollection = Collection.extend({
+  model: Node,
 
-  // GOAL: when a model's visiblity changes for any reason, or the collection shrinks or grows:
-    // calculateLayout(this.collection).
-    // Lots of models will have their position prop changes
-    // Which will trigger views animating to their new positions.
+  // what the hell? it works when i comment this fn? how did it calculate layout the first time?!
+  // initialize: function(models) {
+  //   this.models = models
+  //   this.setPositions()
+  // },
+
+  setPositions: function() {
+    console.log('computing layout!', this.models)
+    // shit, this needs to know how to work with models.
+    this.set(calculateLayout(this.models))
+    return this
+  }
 })
 
-const NodeView = View.extend({
+const NodeView = ItemView.extend({
   template: _.template($('#node-template').html()),
 
-  events: {
-    'click': 'toggleVisibility'
+  triggers: {
+    'click div': 'toggle'
   },
 
   initialize: function() {
-    this.listenTo(this.model, 'change', this.render)
+    this.listenTo(this.model, 'change:position', function(model, value, options) { console.log('view heard its model change position!') })
+    // WIP:
+    // this.model.set('position', { x: 1, y: 3 })
+    // debugger
+    // this.listenTo(this.model, 'change', this.render)
+
     // TODO: this should be smarter.
     // 1) When the visibility changes, hide() or show() this view.
     // 2) When the model's position changes, animate the view to the new coordinates.
@@ -40,31 +52,55 @@ const NodeView = View.extend({
         // The view can get the window size and translate those measurements based on the user scrolling, zooming, etc.
   },
 
-  toggleVisibility: function() {
-    // TODO: delegate this function directly to the model?
-    this.model.toggle('visible')
-  },
-
   render: function() {
     this.setElement(this.template(this.model.attributes))
     return this
   }
 })
 
-$(() => {
-  const nodeData = {
-    0: { id: 0, visible: true, front: '0asdfa', position: {}, children: [1, 2, 3] },
-    1: { id: 1, visible: true, front: '1asdfa', position: {}, children: [] },
-    2: { id: 2, visible: true, front: '2asdfa', position: {}, children: [4, 5] },
-    3: { id: 3, visible: true, front: '3asdfa', position: {}, children: [6] },
-    4: { id: 4, visible: true, front: '4asdfa', position: {}, children: [] },
-    5: { id: 5, visible: true, front: '5asdfa', position: {}, children: [] },
-    6: { id: 6, visible: true, front: '6asdfa', position: {}, children: [] },
+const NodeCollectionView = CollectionView.extend({
+  childView: NodeView,
+
+  initialize: function() {
+    const { listenTo, collection } = this
+    listenTo(collection, 'change:visibility', ::collection.setPositions)
+  },
+
+  events: {
+    'childview:click': 'toggleVisibility'
+  },
+
+  toggleVisibility: function() {
+    // TODO: delegate this function directly to the model?
+    console.log('toggilng visibility on', arguments)
+    // this.model.toggleVisibility()
+  },
+
+  layoutNodes: function() {
+
+    this.collection.set(calculateLayout(this.collection))
   }
 
-  // TODO: make this a collection instead:
-  const nodeModels = _.mapValues(nodeData, nodeDatum => new Node(nodeDatum))
+  // GOAL: when a model's visiblity changes for any reason, or the collection shrinks or grows:
+    // calculateLayout(this.collection).
+    // Lots of models will have their position prop changes
+    // Which will trigger views animating to their new positions.
+})
+
+$(() => {
+  const nodeCollection = new NodeCollection([
+    { id: 0, visible: true, front: '00', position: {}, children: [1, 2, 3] },
+    { id: 1, visible: true, front: '11', position: {}, children: [] },
+    { id: 2, visible: true, front: '22', position: {}, children: [4, 5] },
+    { id: 3, visible: true, front: '33', position: {}, children: [6] },
+    { id: 4, visible: true, front: '44', position: {}, children: [] },
+    { id: 5, visible: true, front: '55', position: {}, children: [] },
+    { id: 6, visible: true, front: '66', position: {}, children: [] },
+  ]).setPositions()
 
   // App kickoff:
-  new CollectionView({ $el: $('#main'), collection: nodeCollection })
+  new NodeCollectionView({
+    el: '#main',
+    collection: nodeCollection
+  }).render()
 })

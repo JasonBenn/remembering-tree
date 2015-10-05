@@ -22,3 +22,10 @@ $el.html() replaces the contents of the $el.
 What does it mean to set an $el?
 
 If it's on the page: it'll use it and not modify it (make sure the DOM is ready first). Otherwise, it'll create a wrapper element out of the four properties on the view and wrap your template with it.
+
+
+Predict and fix the bug: new CollectionView({ $el: $('#main') })
+
+$el isn't on the page! (?) Pass { el: '#main' }, and Backbone will create the cached $el property automatically.
+
+

@@ -1,65 +1,64 @@
 import _ from 'lodash'
 
-export const calculateLayout = nodes => {
-  calculateXPositions(nodes)
-  calculateYPositions(nodes)
-  return nodes;
+export const calculateLayout = models => {
+  calculateXPositions(models)
+  calculateYPositions(models)
+  return models;
 }
 
-const calculateXPositions = nodes => {
+const calculateXPositions = models => {
   let x = 0
-  for (let level of nodesByLevel(nodes)) {
-    for (let node of level) {
-      node.position.x = x
+  for (let level of modelsByTreeLevel(models)) {
+    for (let model of level) {
+      model.attributes.position.x = x
     }
 
-    x += _.max(level.map(node => width(node)))
+    x += 100
   }
-  return nodes;
+  return models;
 }
 
-// TODO: Width of the first line of a node. Is number of chars or 80, whichever is less.
-// Actually, that's a view concern.
-const width = node => 80
-
-const calculateYPositions = nodes => {
-  _.forEach(nodes, node => {
-    node.position.y = _.random(0, 500)
+const calculateYPositions = models => {
+  _.forEach(models, model => {
+    model.attributes.position.y = _.random(0, 500)
   })
-  return nodes;
+  return models;
 }
 
-const getNodeChildren = (node, nodes) => {
-  return node.children.map(id => nodes[id])
+const getNodeChildren = (model, models) => {
+  return model.attributes.children.map(id => models[id])
 }
 
-function * nodesByLevel(nodes, currentLevel, nextLevel = []) {
-  if (!currentLevel) currentLevel = [nodes[0]]
+function * modelsByTreeLevel(models, currentLevel, nextLevel = []) {
+  if (!currentLevel) currentLevel = [models[0]]
   if (!currentLevel.length && !nextLevel.length) return
 
-  currentLevel.forEach(node => {
-    if (node.children.length) nextLevel.push(...getNodeChildren(node, nodes))
+  currentLevel.forEach(model => {
+    if (model.attributes.children.length) {
+      nextLevel.push(...getNodeChildren(model, models))
+    }
   })
 
   yield currentLevel
-  yield * nodesByLevel(nodes, nextLevel)
+  yield * modelsByTreeLevel(models, nextLevel)
 }
 
 
 if (require.main === module) {
   const test = require('tape')
-  const nodes = {
-    0: { id: 0, position: {}, children: [1, 2, 3] },
-    1: { id: 1, position: {}, children: [] },
-    2: { id: 2, position: {}, children: [4, 5] },
-    3: { id: 3, position: {}, children: [6] },
-    4: { id: 4, position: {}, children: [] },
-    5: { id: 5, position: {}, children: [] },
-    6: { id: 6, position: {}, children: [] },
-  }
+  // TODO: rewrite to use a collection instead of an array
+  const nodes = [
+    { id: 0, visible: true, front: '00', position: {}, children: [1, 2, 3] },
+    { id: 1, visible: true, front: '11', position: {}, children: [] },
+    { id: 2, visible: true, front: '22', position: {}, children: [4, 5] },
+    { id: 3, visible: true, front: '33', position: {}, children: [6] },
+    { id: 4, visible: true, front: '44', position: {}, children: [] },
+    { id: 5, visible: true, front: '55', position: {}, children: [] },
+    { id: 6, visible: true, front: '66', position: {}, children: [] },
+  ]
 
   test('getNodeChildren', t => {
-    const nodeChildren = [ nodes[2], nodes[3] ]
+    const nodeChildren = [ nodes[1], nodes[2], nodes[3] ]
 
     t.plan(1)
     t.ok(_.isEqual(getNodeChildren(nodes[0], nodes), nodeChildren))
