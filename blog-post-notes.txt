@@ -1,0 +1,7 @@
+I was disappointed to find that Backbone and ES6 classes don't play nice together. http://benmccormick.org/2015/04/07/es6-classes-and-backbone-js/
+This rules out render() {}
+
+Arrow functions don't really work, either.
+This rules out render: () => {}. The context of render needs to be the instance, and in this case, it's set to whatever the context of the definition of the class is (and because I set mine at the top level of a random file, it's `undefined`.)
+
+So I'm stuck with plain old function() {}.
